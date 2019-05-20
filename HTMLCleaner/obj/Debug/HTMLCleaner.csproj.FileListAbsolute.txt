@@ -1,0 +1,7 @@
+C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\bin\Debug\HTMLCleaner.exe.config
+C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\bin\Debug\HTMLCleaner.exe
+C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\bin\Debug\HTMLCleaner.pdb
+C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.csprojAssemblyReference.cache
+C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.csproj.CoreCompileInputs.cache
+C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.exe
+C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.pdb
