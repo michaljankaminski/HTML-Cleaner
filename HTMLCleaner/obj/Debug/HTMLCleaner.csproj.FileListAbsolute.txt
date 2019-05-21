@@ -5,3 +5,10 @@ C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.cspr
 C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.csproj.CoreCompileInputs.cache
 C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.exe
 C:\Users\Ukulele\source\repos\HTMLCleaner\HTMLCleaner\obj\Debug\HTMLCleaner.pdb
+C:\Users\m.kaminski\Documents\github\HTML-Cleaner\HTMLCleaner\bin\Debug\HTMLCleaner.exe.config
+C:\Users\m.kaminski\Documents\github\HTML-Cleaner\HTMLCleaner\bin\Debug\HTMLCleaner.exe
+C:\Users\m.kaminski\Documents\github\HTML-Cleaner\HTMLCleaner\bin\Debug\HTMLCleaner.pdb
+C:\Users\m.kaminski\Documents\github\HTML-Cleaner\HTMLCleaner\obj\Debug\HTMLCleaner.csprojAssemblyReference.cache
+C:\Users\m.kaminski\Documents\github\HTML-Cleaner\HTMLCleaner\obj\Debug\HTMLCleaner.csproj.CoreCompileInputs.cache
+C:\Users\m.kaminski\Documents\github\HTML-Cleaner\HTMLCleaner\obj\Debug\HTMLCleaner.exe
+C:\Users\m.kaminski\Documents\github\HTML-Cleaner\HTMLCleaner\obj\Debug\HTMLCleaner.pdb

@@ -28,7 +28,7 @@ namespace HTMLCleaner
             var matches = regex.Matches(current_line);
             this.FullName = matches[current_match].Value;
             this.Name = GetSimpleTag(this.FullName);
-            Console.WriteLine(Name);
+            Console.WriteLine(Name + "   " + current_line_arg);
             Dictionaries dictionaries = new Dictionaries();
             if (dictionaries.TagWithoutClosing.ContainsKey(this.Name))
                 this.Closed = true;

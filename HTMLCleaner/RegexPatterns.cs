@@ -15,5 +15,11 @@ namespace HTMLCleaner
         public static Regex HTMLAttributeValue { get; set; } = new Regex(@"""[^""]+""");
         public static Regex Doctype { get; set; } = new Regex(@"<!DOCTYPE[^>]*>");
 
+        public static Regex HTMLTagValue(string tag)
+        {
+            Regex rgx = new Regex(@"<"+tag+" *[^>]*>" + @".*" + @"</"+tag+">");
+            return rgx;
+        }
+
     }
 }
