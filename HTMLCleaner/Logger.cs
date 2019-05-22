@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace HTMLCleaner
 {
-    class ConsoleWriter
+    class Logger
     {
-        static void Write(string line)
+        public static void WriteLine(string line)
         {
             Console.WriteLine(line);
+        }
+        public static void ReadKey(string line)
+        {
+            Console.ReadKey();
         }
     }
 }

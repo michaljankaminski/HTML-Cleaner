@@ -8,10 +8,10 @@ namespace HTMLCleaner
 {
     class Dictionaries
     {
-        public Dictionary<string, bool> TagWithoutClosing = new Dictionary<string, bool>();
-        public Dictionary<string, bool> TagWithOptionalClosing = new Dictionary<string, bool>();
+        public Dictionary<string, bool> TagWithoutClosing { get; set; } = new Dictionary<string, bool>();
+        public Dictionary<string, bool> TagWithOptionalClosing { get; set; } = new Dictionary<string, bool>();
         public Dictionaries()
-        {
+        {//span, b, u, em, strong, h1, h2, h3, h4, h5, h6
             //html, head, body, p, dt, dd, li, option, thead, th, tbody, tr, td, tfoot, colgroup
             TagWithOptionalClosing.Add("html", false);
             TagWithOptionalClosing.Add("head", false);
@@ -28,12 +28,14 @@ namespace HTMLCleaner
             TagWithOptionalClosing.Add("td", false);
             TagWithOptionalClosing.Add("tfoot", false);
             TagWithOptionalClosing.Add("colgroup", false);
-            //img, input, br, hr, meta
+            //img, input, br, hr, meta, link
             TagWithoutClosing.Add("img", false);
             TagWithoutClosing.Add("input", false);
             TagWithoutClosing.Add("br", false);
             TagWithoutClosing.Add("hr", false);
             TagWithoutClosing.Add("meta", false);
+            TagWithoutClosing.Add("link", false);
+
 
         }
     }

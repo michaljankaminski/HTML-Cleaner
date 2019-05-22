@@ -26,14 +26,13 @@
 <div id="searchmenu" class="popupmenu">
   <ul class="toolbarmenu">
     <li><label>
-	<span>Temat</span>
+	<input type="checkbox" name="s_mods[]" value="subject" id="s_mod_subject" onclick="rcmail_ui.set_searchmod(this)"> <span>Temat</span>
 	</label></li>
 
     <li><label class="comment">Data
 	</label>
 	</li>
-    <li>
-	<select name="searchinterval" id="s_interval" onchange="rcmail.set_searchinterval($(this).val())">
+    <li><select name="searchinterval" id="s_interval" onchange="rcmail.set_searchinterval($(this).val())">
 <option value="" selected="selected"></option><option value="1W">wcześniejsza niż tydzień</option>
 <option value="1M">wcześniejsza niż miesiąc</option>
 <option value="1Y">wcześniejsza niż rok</option>
@@ -42,6 +41,10 @@
 <option value="-1Y">starsza niż rok</option>
 </select>
 </li>
+    <li><label class="comment">Zakres</label></li>
+    <li><label><span>Bieżący folder</span></label></li>
+    <li><label><span>Ten i podfoldery</span></label></li>
+    <li><label><span>Wszystkie foldery</span></label></li>
   </ul>
 </div>
 

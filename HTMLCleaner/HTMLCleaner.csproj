@@ -43,9 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleWriter.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="CssAttributes.cs" />
     <Compile Include="Dictionaries.cs" />
+    <Compile Include="OutputGenerator.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

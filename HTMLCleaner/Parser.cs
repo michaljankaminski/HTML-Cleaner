@@ -9,6 +9,7 @@ namespace HTMLCleaner
 {
     class Parser
     {
+        TreeRoot root { get; set; } = null;
         public void ReadFiles(List<string> files)
         {
             foreach (string file in files)
@@ -17,20 +18,37 @@ namespace HTMLCleaner
 
         void BuildTree(string file)
         {
-            TreeRoot root = new TreeRoot();
-            root.BuildTree(file);
-            
+            root = new TreeRoot();
+            root.BuildTree(file);        
         }
-        void DrawTree(TreeRoot root)
+
+        public void GenerateOutput()
         {
-            TreeNode current = root.Child;
-            Console.WriteLine(root.Doctype);
-            while (current != null)
+            if (root == null)
+                Logger.WriteLine("Plik nie został załadowany");
+            else
             {
-                Console.WriteLine(current.FullName);
-                foreach (TreeNode node in current.Children)
-                    current = node;
+                OutputGenerator generator = new OutputGenerator();
+                generator.Generate(root);
             }
         }
+
+        public void DrawTree()
+        {
+
+            TreeNode current = root.Child;
+            int current_level = 1;
+            Logger.WriteLine(root.Doctype);
+            DrawChild(current);
+        }
+
+        void DrawChild(TreeNode node)
+        {
+            Logger.WriteLine(node.FullName);
+            foreach (TreeNode current in node.Children)
+                DrawChild(current);
+        }
+
+        
     }
 }
