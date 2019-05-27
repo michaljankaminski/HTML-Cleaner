@@ -11,6 +11,7 @@ namespace HTMLCleaner
     {
         static void Main(string[] args)
         {
+            Console.Title = "HTML Cleaner";
             if (args.Count() == 0)
                 Logger.WriteLine("Brak podanych plików;");
             List<string> files = new List<string>();

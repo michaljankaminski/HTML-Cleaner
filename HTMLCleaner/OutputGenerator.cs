@@ -38,8 +38,6 @@ namespace HTMLCleaner
                     SetDataForNodeLogger(current);
                 Logger.WriteLine(this.GetClosingTag(node.Name));
             }
-                
-
         }
 
         public void GenerateFile(TreeRoot root)

@@ -51,6 +51,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegexPatterns.cs" />
+    <Compile Include="StringModifier.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="TreeRoot.cs" />
   </ItemGroup>

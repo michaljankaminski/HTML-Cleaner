@@ -27,7 +27,9 @@ namespace HTMLCleaner
                     regex = RegexPatterns.HTMLTag;
                     if (regex.Match(current_line).Value != string.Empty)
                     {
-                        Child = new TreeNode(null, 0, reader,0,current_line );
+                        int current_open = 0;
+                        int current_closed = 0;
+                        Child = new TreeNode(null, 0, reader,ref current_open, ref current_closed, current_line );
                     }
                     current_line = reader.ReadLine();
                 }

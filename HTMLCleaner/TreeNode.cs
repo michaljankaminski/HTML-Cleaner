@@ -18,7 +18,7 @@ namespace HTMLCleaner
         public int Level { get; set; } = 0;
         public bool Closed { get; set; } = false;
         public bool NoClosing { get; set; } = false;
-        public TreeNode(TreeNode parent, int level, StreamReader reader, int current_match, string current_line_arg)
+        public TreeNode(TreeNode parent, int level, StreamReader reader,ref int current_match_opening,ref int current_match_closing, string current_line_arg)
         {
             
             this.Level = ++level;
@@ -27,61 +27,95 @@ namespace HTMLCleaner
             var current_line = current_line_arg;
             var regex = RegexPatterns.HTMLTag;
             var matches = regex.Matches(current_line);
-            this.FullName = matches[current_match].Value;
-            this.Name = GetSimpleTag(this.FullName);
-            Logger.WriteLine(Level + " " + Name + "   " + current_line_arg);
-            Dictionaries dictionaries = new Dictionaries();
-            if (dictionaries.TagWithoutClosing.ContainsKey(this.Name))
-            {
-                this.NoClosing = true;
-                this.Closed = true;
-                current_match++;
+
+            var regex_closed = RegexPatterns.HTMLTagClosed;
+            var matches_for_closed = regex_closed.Matches(current_line);
+
+            this.FullName = matches[current_match_opening].Value;
+            this.Name = StringModifier.GetSimpleTag(this.FullName);
+            //Logger.WriteLine(Level + " " + Name + "   " + current_line_arg);
+            current_match_opening++;
+
+            if (ShouldTagBeClosed(this.Name))
                 return;
-            }
                 
-            current_match++;
             string tag_value = string.Empty;
+
             while (!reader.EndOfStream)
             {
-                regex = RegexPatterns.HTMLTag;
-                matches = regex.Matches(current_line);
-                if (current_match < matches.Count)
+                //Logger.WriteLine(this.Name + "     ");
+                //Logger.WriteLine(current_line);
+
+                while (current_match_opening < matches.Count || current_match_closing < matches_for_closed.Count)
                 {
-                    tag_value = string.Empty;
-                    for (int i = current_match; i < matches.Count; i++)
+                    if (current_match_opening != 1000 && current_match_closing != 1000 && matches.Count > 0 && matches_for_closed.Count > 0 && current_match_opening != matches.Count && current_match_closing != matches_for_closed.Count)
                     {
-                        Children.Add(new TreeNode(this, Level, reader, i, current_line));
+                        if ((matches_for_closed[current_match_closing].Index < matches[current_match_opening].Index) )
+                        {
+                            if (CloseTag(StringModifier.GetSimpleClosingTag(matches_for_closed[current_match_closing].Value), this) == 1)
+                            {
+                                var rgx = RegexPatterns.HTMLTagValue(this.Name);
+                                Match match = rgx.Match(current_line);
+                                Logger.WriteLine(match.Value);
+                            }
+                            current_match_closing++;
+                            
+                        }
+                        else
+                        {
+                            Children.Add(new TreeNode(this, Level, reader, ref current_match_opening, ref current_match_closing, current_line));
+                        }
                     }
-                }
-                else
-                {
-                    if (matches.Count != 0)
-                        tag_value = current_line.Substring(GetPositionOfTagEnd(matches[matches.Count - 1].Value,current_line));
+                    else if (current_match_closing != 1000 && matches_for_closed.Count > 0 && current_match_closing != matches_for_closed.Count)
+                    {
+                        if (CloseTag(StringModifier.GetSimpleClosingTag(matches_for_closed[current_match_closing].Value), this) == 1)
+                        {
+                            var rgx = RegexPatterns.HTMLTagValue(this.Name);
+                            Match match = rgx.Match(current_line);
+                            if (string.IsNullOrEmpty(match.Value))
+                            {
+                                this.Name = GetTagValue(match.Value);
+                            }
+                            Logger.WriteLine(match.Value);
+                        }
+                        current_match_closing++;
+                    }
+                    else if (current_match_opening != 1000 && matches.Count > 0 && current_match_opening != matches.Count)
+                    {
+                        Children.Add(new TreeNode(this, Level, reader, ref current_match_opening, ref current_match_closing, current_line));
+                    }
+                    else
+                    {
+                        Logger.WriteLine("");
+                    }
+
                 }
 
-                regex = RegexPatterns.HTMLTagClosed;
-                matches = regex.Matches(current_line);
-                foreach(Match match in matches)
-                {
-                    if (CloseTag(GetSimpleClosingTag(match.Value),this)==1 && tag_value != string.Empty)
-                    {
-                        var temp_match = regex.Match(tag_value);
-                        this.Value = tag_value.Substring(0, temp_match.Index);
-                    }
-
-                }
                 if (this.Closed)
                     break;
-
-                current_match = 0;
+                current_match_opening = 1000;
+                current_match_closing = 1000;
                 current_line = reader.ReadLine();
                 tag_value += current_line;
+
+                if (!string.IsNullOrEmpty(current_line))
+                {
+                    matches = regex.Matches(current_line);
+                    matches_for_closed = regex_closed.Matches(current_line);
+                    if (matches.Count != 0)
+                        current_match_opening = 0;
+                    if (matches_for_closed.Count != 0)
+                        current_match_closing = 0;
+
+                }
+
             }
         }
 
-        void CheckValuesForTags(string line)
+        string GetTagValue(string match)
         {
-
+            string temp = match.Substring(match.IndexOf('>') + 1, match.IndexOf('<',match.IndexOf('<')+1)- match.IndexOf('>'));
+            return temp;
         }
 
         int GetPositionOfTagEnd(string match, string line)
@@ -107,19 +141,19 @@ namespace HTMLCleaner
             }
             return -1;
         }
-        private string GetSimpleTag(string full_tag)
+
+        private bool ShouldTagBeClosed(string name)
         {
-            if (full_tag.IndexOf(' ') != -1)
-                return full_tag.Substring(1, full_tag.IndexOf(' ') < full_tag.IndexOf('>') ? full_tag.IndexOf(' ') -1: full_tag.IndexOf('>'));
+            Dictionaries dictionaries = new Dictionaries();
+            if (dictionaries.TagWithoutClosing.ContainsKey(name))
+            {
+                this.NoClosing = true;
+                this.Closed = true;
+                return true;
+            }
             else
-                return full_tag.Substring(1,full_tag.IndexOf('>')-1);
+                return false;
         }
-
-        private string GetSimpleClosingTag(string full_tag)
-        {
-            return full_tag.Substring(2,full_tag.Length - 3);
-        }
-
 
     }
 }
