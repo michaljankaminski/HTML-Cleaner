@@ -15,13 +15,18 @@ namespace HTMLCleaner
         public string Name { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Value { get; set; } = string.Empty;
-        public int Level { get; set; } = 0;
+        public string ValueAfterStart { get; set; } = string.Empty;
         public bool Closed { get; set; } = false;
         public bool NoClosing { get; set; } = false;
-        public TreeNode(TreeNode parent, int level, StreamReader reader,ref int current_match_opening,ref int current_match_closing, string current_line_arg)
+
+        public TreeNode()
+        {
+
+        }
+
+        public TreeNode(TreeNode parent, StreamReader reader,ref int current_match_opening,ref int current_match_closing, string current_line_arg)
         {
             
-            this.Level = ++level;
             if (parent != null)
                 this.Parent = parent;
             var current_line = current_line_arg;
@@ -54,35 +59,40 @@ namespace HTMLCleaner
                         {
                             if (CloseTag(StringModifier.GetSimpleClosingTag(matches_for_closed[current_match_closing].Value), this) == 1)
                             {
-                                var rgx = RegexPatterns.HTMLTagValue(this.Name);
-                                Match match = rgx.Match(current_line);
-                                Logger.WriteLine(match.Value);
+                                Match match = RegexPatterns.HTMLTagValue(this.Name).Match(current_line);
+                                if (!string.IsNullOrEmpty(match.Value))
+                                {
+                                    this.Value = StringModifier.GetTagValue(match.Value);
+                                }
+                                current_match_closing++;
+                                break;
+                                //Logger.WriteLine(match.Value);
                             }
                             current_match_closing++;
                             
                         }
                         else
                         {
-                            Children.Add(new TreeNode(this, Level, reader, ref current_match_opening, ref current_match_closing, current_line));
+                            Children.Add(new TreeNode(this, reader, ref current_match_opening, ref current_match_closing, current_line));
                         }
                     }
                     else if (current_match_closing != 1000 && matches_for_closed.Count > 0 && current_match_closing != matches_for_closed.Count)
                     {
                         if (CloseTag(StringModifier.GetSimpleClosingTag(matches_for_closed[current_match_closing].Value), this) == 1)
                         {
-                            var rgx = RegexPatterns.HTMLTagValue(this.Name);
-                            Match match = rgx.Match(current_line);
-                            if (string.IsNullOrEmpty(match.Value))
+                            Match match = RegexPatterns.HTMLTagValue(this.Name).Match(current_line);
+                            if (!string.IsNullOrEmpty(match.Value))
                             {
-                                this.Name = GetTagValue(match.Value);
+                                this.Value = StringModifier.GetTagValue(match.Value);
                             }
-                            Logger.WriteLine(match.Value);
+                            //Logger.WriteLine(match.Value);
                         }
                         current_match_closing++;
                     }
                     else if (current_match_opening != 1000 && matches.Count > 0 && current_match_opening != matches.Count)
                     {
-                        Children.Add(new TreeNode(this, Level, reader, ref current_match_opening, ref current_match_closing, current_line));
+
+                        Children.Add(new TreeNode(this, reader, ref current_match_opening, ref current_match_closing, current_line));
                     }
                     else
                     {
@@ -90,13 +100,21 @@ namespace HTMLCleaner
                     }
 
                 }
-
+                Regex rgx = RegexPatterns.HTMLTagOpenedOrClosed;
+                if(rgx.Matches(current_line).Count != 0)
+                {
+                    var match = rgx.Matches(current_line)[rgx.Matches(current_line).Count - 1];
+                    tag_value += current_line.Substring(StringModifier.GetPositionOfTagEnd(match.Value,current_line,match.Index));
+                }
+                else
+                {
+                    tag_value += current_line;
+                }
                 if (this.Closed)
                     break;
                 current_match_opening = 1000;
                 current_match_closing = 1000;
                 current_line = reader.ReadLine();
-                tag_value += current_line;
 
                 if (!string.IsNullOrEmpty(current_line))
                 {
@@ -112,15 +130,10 @@ namespace HTMLCleaner
             }
         }
 
-        string GetTagValue(string match)
+        string GetBeforeStartValue(string current_line)
         {
-            string temp = match.Substring(match.IndexOf('>') + 1, match.IndexOf('<',match.IndexOf('<')+1)- match.IndexOf('>'));
-            return temp;
-        }
 
-        int GetPositionOfTagEnd(string match, string line)
-        {
-             return line.IndexOf(match) + match.Length;
+            return string.Empty;
         }
 
         int CloseTag(string name, TreeNode current_arg)

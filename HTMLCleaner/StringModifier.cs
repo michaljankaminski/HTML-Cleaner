@@ -20,5 +20,15 @@ namespace HTMLCleaner
         {
             return full_tag.Substring(2, full_tag.Length - 3);
         }
+
+        public static string GetTagValue(string match)
+        {
+            return match.Substring(match.IndexOf('>') + 1, match.IndexOf('<', match.IndexOf('<') + 1) - match.IndexOf('>') - 1);
+        }
+
+        public static int GetPositionOfTagEnd(string match, string line, int startindex)
+        {
+            return line.IndexOf(match, startindex) + match.Length;
+        }
     }
 }

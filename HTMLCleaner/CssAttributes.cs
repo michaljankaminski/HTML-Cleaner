@@ -8,6 +8,10 @@ namespace HTMLCleaner
 {
     class CssAttributes
     {
+        public string AttributeRemoval(string input)
+        {
 
+            return string.Empty;
+        }
     }
 }

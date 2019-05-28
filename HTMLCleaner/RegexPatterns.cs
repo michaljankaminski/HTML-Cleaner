@@ -9,11 +9,13 @@ namespace HTMLCleaner
 {
     class RegexPatterns
     {
-        public static Regex HTMLTag { get; set; } = new Regex(@"<[a-zA-Z]+ *[^>]*>");
-        public static Regex HTMLTagClosed { get; set; } = new Regex(@"</[a-zA-Z]+>");
+        public static Regex HTMLTag { get; set; } = new Regex(@"<[a-zA-Z0-9]+ *[^>]*>");
+        public static Regex HTMLTagOpenedOrClosed { get; set; } = new Regex(@"<[^(>|<)]+>");
+        public static Regex HTMLTagClosed { get; set; } = new Regex(@"</[a-zA-Z0-9]+>");
         public static Regex HTMLAttribute { get; set; } = new Regex(@" +[^=]+ *=");
         public static Regex HTMLAttributeValue { get; set; } = new Regex(@"""[^""]+""");
         public static Regex Doctype { get; set; } = new Regex(@"<!DOCTYPE[^>]*>");
+        public static Regex StyleAttribute { get; set; } = new Regex(@"style[^=]*=");
 
         public static Regex HTMLTagValue(string tag)
         {

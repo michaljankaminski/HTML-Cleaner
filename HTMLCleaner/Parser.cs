@@ -37,7 +37,6 @@ namespace HTMLCleaner
         {
 
             TreeNode current = root.Child;
-            int current_level = 1;
             Logger.WriteLine(root.Doctype);
             DrawChild(current);
         }
