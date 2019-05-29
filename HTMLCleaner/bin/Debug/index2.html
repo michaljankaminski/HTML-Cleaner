@@ -12,8 +12,10 @@
 <script type="text/javascript" src="./(83) Wydział Elektroniki i Technik Informacyjnych __ Odebrane_files/splitter.min.js.download"></script>
 <script type="text/javascript" src="./(83) Wydział Elektroniki i Technik Informacyjnych __ Odebrane_files/functions.min.js.download"></script>
 <style type="text/css">
-#mailcontframe { height: 354px; }
-#mailpreviewframe { top: 364px; }
+#mailcontframe { height: 354px;
+font-size: 20px;
+background: blue; }
+#mailpreviewframe { top: 364px; color: white;}
 #mailleftcontainer { width: 148px; }
 #mailrightcontainer { left: 158px; }
 </style>
@@ -35,7 +37,7 @@
     <li>
 	<select name="searchinterval" id="s_interval" onchange="rcmail.set_searchinterval($(this).val())">
 <option value="" selected="selected"></option><option value="1W">wcześniejsza niż tydzień</option>
-<option value="1M">wcześniejsza niż miesiąc</option>
+<option value="1M" style="background-color: blue; font-size: 50px">wcześniejsza niż miesiąc</option>
 <option value="1Y">wcześniejsza niż rok</option>
 <option value="-1W">starsza niż tydzień</option>
 <option value="-1M">starsza niż miesiąc</option>

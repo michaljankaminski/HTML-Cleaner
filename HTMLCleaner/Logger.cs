@@ -12,7 +12,7 @@ namespace HTMLCleaner
         {
             Console.WriteLine(line);
         }
-        public static void ReadKey(string line)
+        public static void ReadKey()
         {
             Console.ReadKey();
         }

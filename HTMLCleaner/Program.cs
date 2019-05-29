@@ -13,23 +13,42 @@ namespace HTMLCleaner
         {
             Console.Title = "HTML Cleaner";
             if (args.Count() == 0)
-                Logger.WriteLine("Brak podanych plików;");
+                Logger.WriteLine("There are no arguments given");
             List<string> files = new List<string>();
+            List<string> css_files = new List<string>();
             foreach(string file in args)
             {
+                
                 if (!File.Exists(file))
-                    Logger.WriteLine("Plik nie istnieje: " + file);
+                    Logger.WriteLine("File does not exist: " + file);
                 else
-                    files.Add(file);
+                {
+                    if (Path.GetExtension(file) == ".html")
+                        files.Add(file);
+                    else if (Path.GetExtension(file) == ".css")
+                        css_files.Add(file);
+                }
+                    
             }
+            Logger.WriteLine("The application starts...");
             Parser parser = new Parser();
-            parser.ReadFiles(files);
-            Logger.WriteLine("");
-            Logger.WriteLine("");
-            Logger.WriteLine("");
-            parser.GenerateOutput();
+            try
+            {
+                parser.ReadFiles(files);
+                parser.CheckForNotClosedTags();
+                parser.CleanAttributes();
+                parser.RemoveUnwantedTags();
+                parser.GenerateOutput();
 
-            Logger.WriteLine("Zakonczono działanie aplikacji");
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine(ex.Message);
+            }
+            foreach (string file in css_files)
+                parser.ParseCss(file);
+
+            Logger.WriteLine("The application has finished working.");
             Console.ReadKey();
         }
     }

@@ -44,17 +44,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logger.cs" />
-    <Compile Include="CssAttributes.cs" />
-    <Compile Include="Dictionaries.cs" />
+    <Compile Include="controller\AttributeCleaner.cs" />
+    <Compile Include="model\Dictionaries.cs" />
     <Compile Include="OutputGenerator.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="controller\Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegexPatterns.cs" />
-    <Compile Include="StringModifier.cs" />
-    <Compile Include="TreeBuilder.cs" />
-    <Compile Include="TreeNode.cs" />
-    <Compile Include="TreeRoot.cs" />
+    <Compile Include="model\RegexPatterns.cs" />
+    <Compile Include="controller\StringModifier.cs" />
+    <Compile Include="controller\TagCleaner.cs" />
+    <Compile Include="model\TreeNode.cs" />
+    <Compile Include="model\TreeRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
