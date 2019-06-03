@@ -9,7 +9,7 @@ namespace HTMLCleaner
 {
     class Parser
     {
-        List<TreeRoot> roots { get; set; } = null;
+        public List<TreeRoot> roots { get; set; } = null;
         public void ReadFiles(List<string> files)
         {
             roots = new List<TreeRoot>();
@@ -25,29 +25,22 @@ namespace HTMLCleaner
 
         }
 
-        public void GenerateOutput()
+        public void GenerateOutput(TreeRoot root)
         {
-            foreach(TreeRoot root in roots)
+            if (root == null)
+                Logger.WriteLine("Plik nie został załadowany");
+            else
             {
-                if (root == null)
-                    Logger.WriteLine("Plik nie został załadowany");
-                else
-                {
-                    OutputGenerator generator = new OutputGenerator();
-                    generator.Generate(root);
-                }
+                OutputGenerator generator = new OutputGenerator();
+                generator.Generate(root);
             }
 
         }
-        public void CleanAttributes()
+        public void CleanAttributes(TreeRoot root)
         {
             AttributeCleaner cleaner = new AttributeCleaner();
-            foreach ( TreeRoot root in roots)
-            {
-                TreeNode current = root.Child;
-                CleanAttributesChild(current, cleaner);
-            }
-
+            TreeNode current = root.Child;
+            CleanAttributesChild(current, cleaner);
         }
         void CleanAttributesChild(TreeNode node,AttributeCleaner cleaner)
         {
@@ -63,58 +56,52 @@ namespace HTMLCleaner
             node.Value = cleaner.CleanStyleTag(node.Value);
         }
 
-        public void RemoveUnwantedTags()
+        public void RemoveUnwantedTags(TreeRoot root)
         {
             TagCleaner cleaner = new TagCleaner();
-            foreach (TreeRoot root in roots)
-            {
-                TreeNode current = root.Child;
-                RemoveUnwantedTagChild(current, cleaner);
-            }
+            TreeNode current = root.Child;
+            RemoveUnwantedTagChild(current, cleaner, root);
         }
-        void RemoveUnwantedTagChild(TreeNode node, TagCleaner cleaner)
+        void RemoveUnwantedTagChild(TreeNode node, TagCleaner cleaner, TreeRoot root)
         {
             if (cleaner.TagRemover(node) != 1)
             {
                 try
                 {
                     foreach (TreeNode current in node.Children)
-                        RemoveUnwantedTagChild(current, cleaner);
+                        RemoveUnwantedTagChild(current, cleaner, root);
                 }
                 catch
                 {
-                    RemoveUnwantedTags();
+                    RemoveUnwantedTags(root);
                 }
 
             }
 
         }
 
-        public void CheckForNotClosedTags()
+        public void CheckForNotClosedTags(TreeRoot root)
         {
-            foreach (TreeRoot root in roots)
-            {
-                TreeNode current = root.Child;
-                current.Closed = true;
-                CheckForNotClosedTagsChild(current);                 
-            }
+            TreeNode current = root.Child;
+            current.Closed = true;
+            CheckForNotClosedTagsChild(current, root);                 
         }
 
-        void CheckForNotClosedTagsChild(TreeNode node)
+        void CheckForNotClosedTagsChild(TreeNode node,TreeRoot root)
         {
             
             if (!node.Closed)
             {
                 if (Dictionaries.Instance.TagWithOptionalClosing.ContainsKey(node.Name))
-                    Logger.WriteLine("Warning! The "+ node.Name + " tag which starts at "+ node.LineNumber +" line should have closing");
+                    Logger.WriteLine("[" + Path.GetFileName(root.FilePath)+ "]" + "Warning! The "+ node.Name + " tag which starts at "+ node.LineNumber +" line should have closing");
                 else
                 {
-                    throw new Exception("Error! The " + node.Name + " tag which starts at " + node.LineNumber + " line does not have closing");
+                    throw new Exception("[" + Path.GetFileName(root.FilePath) + "]" + "Error! The " + node.Name + " tag which starts at " + node.LineNumber + " line does not have closing");
                 }
                     
             }
             foreach (TreeNode current in node.Children)
-                CheckForNotClosedTagsChild(current);
+                CheckForNotClosedTagsChild(current, root);
         }
 
         public void ParseCss(string file)

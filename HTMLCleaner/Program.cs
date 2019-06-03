@@ -32,19 +32,24 @@ namespace HTMLCleaner
             }
             Logger.WriteLine("The application starts...");
             Parser parser = new Parser();
-            try
+            parser.ReadFiles(files);
+            foreach (var root in parser.roots)
             {
-                parser.ReadFiles(files);
-                parser.CheckForNotClosedTags();
-                parser.CleanAttributes();
-                parser.RemoveUnwantedTags();
-                parser.GenerateOutput();
+                Logger.WriteLine("Working on: "+ Path.GetFileName(root.FilePath));
+                try
+                {
+                    parser.CheckForNotClosedTags(root);
+                    parser.CleanAttributes(root);
+                    parser.RemoveUnwantedTags(root);
+                    parser.GenerateOutput(root);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(ex.Message);
+                }
 
             }
-            catch (Exception ex)
-            {
-                Logger.WriteLine(ex.Message);
-            }
+
             foreach (string file in css_files)
                 parser.ParseCss(file);
 

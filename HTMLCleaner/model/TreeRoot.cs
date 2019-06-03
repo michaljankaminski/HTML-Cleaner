@@ -10,10 +10,13 @@ namespace HTMLCleaner
 {
     class TreeRoot
     {
+        public string FilePath { get; set; } = string.Empty;
         public TreeNode Child { get; set; } = null;
-        public string Doctype { get; set; } = String.Empty;
+        public string Doctype { get; set; } = string.Empty;
         public void BuildTree(string file)
         {
+            Dictionaries.Instance.CurrentNumber = 0;
+            this.FilePath = file;
             string current_line = String.Empty;
             using (StreamReader reader = new StreamReader(file))
             {

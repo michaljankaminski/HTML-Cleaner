@@ -32,8 +32,9 @@ namespace HTMLCleaner
 
         public void GenerateFile(TreeRoot root)
         {
+            File.Move(root.FilePath, root.FilePath + "_copy");
             current_level++;
-            using (StreamWriter writer = new StreamWriter("index_" + DateTime.Now.ToString("MM_dd_yyyy HH_mm") + ".html"))
+            using (StreamWriter writer = new StreamWriter(root.FilePath))
             {
                 writer.WriteLine(root.Doctype);
                 this.SetDataForNodeFile(root.Child, writer);

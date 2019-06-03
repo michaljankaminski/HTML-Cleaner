@@ -29,7 +29,6 @@ namespace HTMLCleaner
             this.LineNumber = Dictionaries.Instance.CurrentNumber;
             var regex = RegexPatterns.HTMLTag;
             var matches = regex.Matches(current_line);
-
             var regex_closed = RegexPatterns.HTMLTagClosed;
             var matches_for_closed = regex_closed.Matches(current_line);
 
